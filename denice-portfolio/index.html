@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Denice Mikaela Lopez — Web Developer &amp; IT Officer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#070a10;
+    --bg-1:#0b0f17;
+    --bg-panel:#0e131c;
+    --border:#1b2431;
+    --border-hi:#2a3949;
+    --text-hi:#e8eef4;
+    --text-mid:#93a2b3;
+    --text-dim:#5b6a7c;
+    --cyan:#4fd8e8;
+    --cyan-dim:#2a7f8c;
+    --blue:#3b82f6;
+    --green:#3ddc84;
+    --amber:#e8b84f;
+    --red:#e85f5f;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: 'Inter', -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(79,216,232,0.08), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 20%, rgba(59,130,246,0.06), transparent 60%),
+      var(--bg-0);
+    color:var(--text-hi);
+    font-family:var(--sans);
+    line-height:1.5;
+    min-height:100vh;
+  }
+  a{color:inherit; text-decoration:none;}
+  ::selection{background:rgba(79,216,232,0.25); color:var(--text-hi);}
+
+  /* scanline / grid texture */
+  .grid-overlay{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      linear-gradient(rgba(79,216,232,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,216,232,0.025) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(ellipse 100% 60% at 50% 0%, black, transparent 75%);
+  }
+
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+
+  /* ===== NAV ===== */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(7,10,16,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  nav{
+    max-width:1080px; margin:0 auto; padding:16px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{
+    font-family:var(--mono); font-size:14px; font-weight:600; color:var(--text-hi);
+    display:flex; align-items:center; gap:8px;
+  }
+  .brand .dot{width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.4;}}
+  .navlinks{display:flex; gap:28px; font-family:var(--mono); font-size:12.5px; color:var(--text-mid);}
+  .navlinks a{transition:color .15s;}
+  .navlinks a:hover{color:var(--cyan);}
+  .navlinks .idx{color:var(--cyan-dim); margin-right:6px;}
+
+  /* ===== HERO / TERMINAL ===== */
+  .hero{padding:72px 0 60px;}
+  .term-window{
+    background:var(--bg-panel);
+    border:1px solid var(--border-hi);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 0 0 1px rgba(79,216,232,0.03), 0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+  .term-titlebar{
+    display:flex; align-items:center; gap:8px;
+    padding:11px 14px;
+    background:linear-gradient(180deg, #131a24, #0f151d);
+    border-bottom:1px solid var(--border);
+  }
+  .tb-dot{width:10px; height:10px; border-radius:50%;}
+  .tb-dot.r{background:#ff5f57;} .tb-dot.y{background:#febc2e;} .tb-dot.g{background:#28c840;}
+  .term-titlebar .title{
+    margin-left:8px; font-family:var(--mono); font-size:12px; color:var(--text-dim);
+  }
+  .term-body{padding:26px 28px 30px; font-family:var(--mono); font-size:14px;}
+  .term-line{display:flex; gap:10px; margin-bottom:6px; flex-wrap:wrap;}
+  .prompt{color:var(--green); user-select:none;}
+  .cmd{color:var(--text-hi);}
+  .out{color:var(--text-mid); padding-left:20px; margin-bottom:14px;}
+  .out .k{color:var(--cyan);}
+
+  .hero-name{
+    font-family:var(--mono); font-weight:700;
+    font-size:clamp(30px, 5vw, 50px);
+    letter-spacing:-0.02em;
+    margin:18px 0 6px;
+    color:var(--text-hi);
+  }
+  .hero-name .caret{
+    display:inline-block; width:0.5em; background:var(--cyan);
+    animation:blink 1s step-end infinite; margin-left:4px;
+  }
+  @keyframes blink{50%{opacity:0;}}
+  .hero-role{
+    font-family:var(--mono); font-size:15px; color:var(--cyan); margin-bottom:16px;
+  }
+  .hero-desc{
+    color:var(--text-mid); font-size:15.5px; max-width:560px; margin-bottom:26px;
+  }
+  .cta-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono); font-size:13px; padding:11px 20px; border-radius:6px;
+    border:1px solid var(--border-hi); display:inline-flex; align-items:center; gap:8px;
+    transition:all .15s;
+  }
+  .btn-primary{background:var(--cyan); color:#04141a; border-color:var(--cyan); font-weight:600;}
+  .btn-primary:hover{background:#6fe4f0; box-shadow:0 0 24px rgba(79,216,232,0.35);}
+  .btn-ghost{color:var(--text-mid); background:transparent;}
+  .btn-ghost:hover{border-color:var(--cyan-dim); color:var(--cyan);}
+
+  /* ===== SECTION HEADERS ===== */
+  section{padding:64px 0;}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:34px;}
+  .sec-tag{font-family:var(--mono); font-size:12px; color:var(--cyan-dim); border:1px solid var(--border-hi); padding:4px 10px; border-radius:4px;}
+  .sec-title{font-family:var(--mono); font-size:22px; font-weight:700; color:var(--text-hi);}
+  .sec-rule{flex:1; height:1px; background:linear-gradient(90deg, var(--border-hi), transparent);}
+
+  /* ===== ABOUT ===== */
+  .about-grid{display:grid; grid-template-columns: 1.1fr 0.9fr; gap:40px; align-items:start;}
+  .about-text p{color:var(--text-mid); font-size:15px; margin-bottom:14px;}
+  .about-text .lead{color:var(--text-hi); font-size:16.5px; margin-bottom:16px;}
+  .stat-panel{
+    background:var(--bg-panel); border:1px solid var(--border); border-radius:8px; padding:18px 20px;
+  }
+  .stat-panel .ph{font-family:var(--mono); font-size:11.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.08em; margin-bottom:14px; display:flex; justify-content:space-between;}
+  .stat-row{display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:13px;}
+  .stat-row:last-child{border-bottom:none;}
+  .stat-row .label{color:var(--text-mid);}
+  .stat-row .val{color:var(--cyan);}
+  .status-ok{color:var(--green); display:flex; align-items:center; gap:6px;}
+  .status-ok::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--green);}
+
+  /* ===== PROJECTS ===== */
+  .proj-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:22px;}
+  .proj-card{
+    background:var(--bg-panel); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+    transition:transform .18s, border-color .18s, box-shadow .18s;
+    display:flex; flex-direction:column;
+  }
+  .proj-card:hover{transform:translateY(-4px); border-color:var(--cyan-dim); box-shadow:0 20px 40px -20px rgba(79,216,232,0.25);}
+  .proj-bar{
+    display:flex; align-items:center; gap:8px; padding:10px 14px;
+    background:#111823; border-bottom:1px solid var(--border);
+    font-family:var(--mono); font-size:11.5px; color:var(--text-dim);
+  }
+  .proj-bar .dots{display:flex; gap:5px;}
+  .proj-bar .dots span{width:8px; height:8px; border-radius:50%;}
+  .proj-body{padding:20px 20px 22px; flex:1; display:flex; flex-direction:column;}
+  .proj-status{
+    display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:11px;
+    padding:3px 9px; border-radius:20px; border:1px solid var(--border-hi); color:var(--text-mid); width:fit-content; margin-bottom:12px;
+  }
+  .proj-status.live{color:var(--green); border-color:rgba(61,220,132,0.3);}
+  .proj-status.live::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 6px var(--green);}
+  .proj-status.acad::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--amber);}
+  .proj-status.acad{color:var(--amber); border-color:rgba(232,184,79,0.3);}
+  .proj-title{font-family:var(--mono); font-size:17px; font-weight:700; color:var(--text-hi); margin-bottom:8px;}
+  .proj-desc{color:var(--text-mid); font-size:14px; flex:1; margin-bottom:16px;}
+  .proj-tags{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;}
+  .proj-tags span{font-family:var(--mono); font-size:11px; color:var(--cyan); background:rgba(79,216,232,0.08); border:1px solid rgba(79,216,232,0.2); padding:3px 8px; border-radius:4px;}
+  .proj-link{font-family:var(--mono); font-size:12.5px; color:var(--text-hi); display:inline-flex; align-items:center; gap:6px; border-top:1px solid var(--border); padding-top:14px;}
+  .proj-link:hover{color:var(--cyan);}
+  .proj-link.disabled{color:var(--text-dim); cursor:default;}
+  .proj-link .arrow{transition:transform .15s;}
+  .proj-link:hover .arrow{transform:translateX(3px);}
+
+  /* ===== SKILLS DASHBOARD ===== */
+  .dash{
+    background:var(--bg-panel); border:1px solid var(--border); border-radius:10px; padding:26px 28px;
+  }
+  .dash-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:28px 34px;}
+  .skill-block .skill-top{display:flex; justify-content:space-between; font-family:var(--mono); font-size:12.5px; margin-bottom:8px;}
+  .skill-block .skill-top .name{color:var(--text-hi);}
+  .skill-block .skill-top .pct{color:var(--cyan);}
+  .bar-track{height:6px; background:#141c27; border-radius:3px; overflow:hidden; border:1px solid var(--border);}
+  .bar-fill{height:100%; background:linear-gradient(90deg, var(--cyan-dim), var(--cyan)); border-radius:3px;}
+
+  /* ===== CONTACT ===== */
+  .contact-panel{
+    background:var(--bg-panel); border:1px solid var(--border-hi); border-radius:10px;
+    padding:36px; text-align:left; position:relative; overflow:hidden;
+  }
+  .contact-panel::before{
+    content:''; position:absolute; top:-40%; right:-10%; width:300px; height:300px;
+    background:radial-gradient(circle, rgba(79,216,232,0.10), transparent 70%); pointer-events:none;
+  }
+  .contact-eyebrow{font-family:var(--mono); font-size:12px; color:var(--green); display:flex; align-items:center; gap:8px; margin-bottom:10px;}
+  .contact-eyebrow::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 6px var(--green);}
+  .contact-title{font-family:var(--mono); font-weight:700; font-size:26px; margin-bottom:14px;}
+  .contact-sub{color:var(--text-mid); max-width:480px; margin-bottom:26px; font-size:15px;}
+  .contact-list{display:flex; flex-wrap:wrap; gap:12px;}
+  .clink{
+    display:flex; align-items:center; gap:10px; font-family:var(--mono); font-size:13px;
+    background:#0e151f; border:1px solid var(--border); padding:11px 16px; border-radius:8px;
+    color:var(--text-hi); transition:border-color .15s, color .15s;
+  }
+  .clink:hover{border-color:var(--cyan); color:var(--cyan);}
+  .clink .ic{color:var(--cyan); font-size:14px;}
+
+  footer{border-top:1px solid var(--border); padding:26px 0 40px;}
+  .foot-row{display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:11.5px; color:var(--text-dim); flex-wrap:wrap; gap:10px;}
+
+  @media (max-width:760px){
+    .navlinks{display:none;}
+    .about-grid{grid-template-columns:1fr;}
+    .term-body{font-size:12.5px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-overlay"></div>
+
+<header>
+  <nav>
+    <div class="brand"><span class="dot"></span>denice.dev</div>
+    <div class="navlinks">
+      <a href="#about"><span class="idx">01</span>about</a>
+      <a href="#projects"><span class="idx">02</span>projects</a>
+      <a href="#skills"><span class="idx">03</span>skills</a>
+      <a href="#contact"><span class="idx">04</span>contact</a>
+    </div>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="term-window">
+      <div class="term-titlebar">
+        <span class="tb-dot r"></span><span class="tb-dot y"></span><span class="tb-dot g"></span>
+        <span class="title">denice@portfolio: ~</span>
+      </div>
+      <div class="term-body">
+        <div class="term-line"><span class="prompt">$</span><span class="cmd">whoami</span></div>
+        <div class="hero-name">Denice Mikaela Lopez<span class="caret">&nbsp;</span></div>
+        <div class="hero-role">&gt; Web Developer / IT Officer</div>
+
+        <div class="term-line" style="margin-top:18px;"><span class="prompt">$</span><span class="cmd">cat about.txt</span></div>
+        <div class="hero-desc">
+          I build and maintain websites end-to-end — from landing pages for real businesses to full
+          e-commerce platforms and capstone systems — and handle the IT side that keeps things running.
+          Comfortable moving between front-end polish and back-office infrastructure.
+        </div>
+
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#projects">./view_projects</a>
+          <a class="btn btn-ghost" href="#contact">./contact_me</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="sec-head">
+      <span class="sec-tag">01</span>
+      <span class="sec-title">about</span>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="lead">I'm a web developer and IT officer who likes owning a project from planning to deployment.</p>
+        <p>My work spans building public-facing sites for real organizations, developing e-commerce platforms as part of team projects, and leading a full capstone system from concept to delivery. On the IT side, I handle the day-to-day work of keeping systems, sites, and infrastructure running smoothly.</p>
+        <p>I care about clean, functional interfaces and systems that don't break under real-world use — not just in a classroom demo.</p>
+      </div>
+      <div class="stat-panel">
+        <div class="ph"><span>system_profile.json</span><span>v1.0</span></div>
+        <div class="stat-row"><span class="label">role</span><span class="val">Web Dev / IT Officer</span></div>
+        <div class="stat-row"><span class="label">focus</span><span class="val">Full-stack + Infra</span></div>
+        <div class="stat-row"><span class="label">projects_shipped</span><span class="val">3</span></div>
+        <div class="stat-row"><span class="label">status</span><span class="status-ok">available</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="sec-head">
+      <span class="sec-tag">02</span>
+      <span class="sec-title">projects</span>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="proj-grid">
+
+      <!-- CareConnect Pro -->
+      <div class="proj-card">
+        <div class="proj-bar">
+          <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+          careconnectpro.info
+        </div>
+        <div class="proj-body">
+          <div class="proj-status live">live</div>
+          <div class="proj-title">CareConnect Pro</div>
+          <div class="proj-desc">Landing page built and deployed for a former employer — designed to present their services clearly and drive inquiries from visitors.</div>
+          <div class="proj-tags"><span>Landing Page</span><span>Client Work</span><span>Deployed</span></div>
+          <a class="proj-link" href="https://careconnectpro.info" target="_blank" rel="noopener">visit_site <span class="arrow">→</span></a>
+        </div>
+      </div>
+
+      <!-- E-commerce -->
+      <div class="proj-card">
+        <div class="proj-bar">
+          <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+          school-project / ecommerce
+        </div>
+        <div class="proj-body">
+          <div class="proj-status acad">school project</div>
+          <div class="proj-title">E-Commerce Platform</div>
+          <div class="proj-desc">A group project built for a school assignment — a functioning e-commerce web app covering product listings, cart flow, and checkout.</div>
+          <div class="proj-tags"><span>E-Commerce</span><span>Team Project</span><span>Web App</span></div>
+          <span class="proj-link disabled">source available on request</span>
+        </div>
+      </div>
+
+      <!-- Frames -->
+      <div class="proj-card">
+        <div class="proj-bar">
+          <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+          capstone / frames
+        </div>
+        <div class="proj-body">
+          <div class="proj-status acad">capstone</div>
+          <div class="proj-title">Frames</div>
+          <div class="proj-desc">Capstone project developed as a full system from planning through delivery — the flagship piece of my academic work.</div>
+          <div class="proj-tags"><span>Capstone</span><span>Full-Stack</span></div>
+          <span class="proj-link disabled">source available on request</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="sec-head">
+      <span class="sec-tag">03</span>
+      <span class="sec-title">skills</span>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="dash">
+      <div class="dash-grid">
+        <div class="skill-block">
+          <div class="skill-top"><span class="name">HTML / CSS</span><span class="pct">90%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-top"><span class="name">JavaScript</span><span class="pct">80%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-top"><span class="name">Web Deployment</span><span class="pct">85%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-top"><span class="name">IT / Systems Support</span><span class="pct">85%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-top"><span class="name">Database Management</span><span class="pct">75%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:75%"></div></div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-top"><span class="name">Project Delivery</span><span class="pct">80%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="sec-head">
+      <span class="sec-tag">04</span>
+      <span class="sec-title">contact</span>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="contact-panel">
+      <div class="contact-eyebrow">connection secure</div>
+      <div class="contact-title">Let's build something.</div>
+      <div class="contact-sub">Open to web development and IT roles or freelance projects. Reach out through any of the channels below.</div>
+      <div class="contact-list">
+        <a class="clink" href="mailto:denicemikaelapl@gmail.com"><span class="ic">✉</span>denicemikaelapl@gmail.com</a>
+        <a class="clink" href="tel:+639619098505"><span class="ic">☎</span>0961 909 8505</a>
+        <a class="clink" href="https://github.com/denmiks" target="_blank" rel="noopener"><span class="ic">⌥</span>github.com/denmiks</a>
+        <a class="clink" href="https://www.linkedin.com/in/denicemikaela/" target="_blank" rel="noopener"><span class="ic">in</span>linkedin.com/in/denicemikaela</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap foot-row">
+    <span>© 2026 Denice Mikaela Lopez</span>
+    <span class="status-ok">system online — built with HTML / CSS / JS</span>
+  </div>
+</footer>
+
+</body>
+</html>
