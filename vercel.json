@@ -1,3 +1,15 @@
 {
-  "rootDirectory": "denice-portfolio"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "builds": [
+    {
+      "src": "denice-portfolio/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/denice-portfolio/$1"
+    }
+  ]
 }
