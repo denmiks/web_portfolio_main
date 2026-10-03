@@ -310,7 +310,7 @@
         <div class="ph"><span>system_profile.json</span><span>v1.0</span></div>
         <div class="stat-row"><span class="label">role</span><span class="val">Web Dev / IT Officer</span></div>
         <div class="stat-row"><span class="label">focus</span><span class="val">Full-stack + Infra</span></div>
-        <div class="stat-row"><span class="label">projects_shipped</span><span class="val">7</span></div>
+        <div class="stat-row"><span class="label">projects_shipped</span><span class="val">8</span></div>
         <div class="stat-row"><span class="label">status</span><span class="status-ok">available</span></div>
       </div>
     </div>
@@ -427,6 +427,21 @@
           <div class="proj-desc">Website developed for a diet and nutrition service — presenting services and letting clients get in touch.</div>
           <div class="proj-tags"><span>Business Site</span><span>Client Work</span><span>Deployed</span></div>
           <a class="proj-link" href="https://www.annalizadiet.com/" target="_blank" rel="noopener">visit_site <span class="arrow">→</span></a>
+        </div>
+      </div>
+
+      <!-- JPLF Space -->
+      <div class="proj-card">
+        <div class="proj-bar">
+          <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+          jplf.space
+        </div>
+        <div class="proj-body">
+          <div class="proj-status live">live</div>
+          <div class="proj-title">JPLF Space</div>
+          <div class="proj-desc">A site I built for my friend group to hold our pictures — with a photobooth built in, so we can take photo strips wherever we happen to be.</div>
+          <div class="proj-tags"><span>Photobooth</span><span>Web App</span><span>Personal Project</span></div>
+          <a class="proj-link" href="https://www.jplf.space/" target="_blank" rel="noopener">visit_site <span class="arrow">→</span></a>
         </div>
       </div>
 
@@ -548,7 +563,7 @@
   var BASE_R = 1.05;    /* resting dot radius */
   var BASE_A = 0.22;    /* resting dot alpha */
   var FADE_MIN = 0.30;  /* dot alpha multiplier at the bottom of the viewport */
-  var LENS = 150;       /* glass radius around the cursor */
+  var LENS = 100;       /* glass radius around the cursor */
   var MAX_SCALE = 3.4;  /* how much dots grow under the cursor */
   var TAU = Math.PI * 2;
 
@@ -644,13 +659,6 @@
         ctx.fill();
       }
     }
-
-    /* lens rim */
-    ctx.strokeStyle = tint(0.1, 0.20 * inten);
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(lx, ly, LENS, 0, TAU);
-    ctx.stroke();
   }
 
   function frame(){
