@@ -41,14 +41,10 @@
   a{color:inherit; text-decoration:none;}
   ::selection{background:rgba(79,216,232,0.25); color:var(--text-hi);}
 
-  /* scanline / grid texture */
-  .grid-overlay{
+  /* dot field background with a cursor-following lens (drawn in canvas) */
+  .dot-field{
     position:fixed; inset:0; pointer-events:none; z-index:0;
-    background-image:
-      linear-gradient(rgba(79,216,232,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(79,216,232,0.025) 1px, transparent 1px);
-    background-size:48px 48px;
-    mask-image:radial-gradient(ellipse 100% 60% at 50% 0%, black, transparent 75%);
+    width:100%; height:100%; display:block;
   }
 
   .wrap{max-width:1080px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
@@ -198,6 +194,28 @@
   .bar-track{height:6px; background:#141c27; border-radius:3px; overflow:hidden; border:1px solid var(--border);}
   .bar-fill{height:100%; background:linear-gradient(90deg, var(--cyan-dim), var(--cyan)); border-radius:3px;}
 
+  .dash-sub{
+    font-family:var(--mono); font-size:11.5px; color:var(--text-dim);
+    text-transform:uppercase; letter-spacing:.1em;
+    padding-bottom:12px; margin:0 0 22px; border-bottom:1px solid var(--border);
+  }
+  .dash-sub:not(:first-child){margin-top:32px;}
+
+  .stack-group + .stack-group{margin-top:20px;}
+  .stack-label{
+    font-family:var(--mono); font-size:12.5px; color:var(--text-hi);
+    display:flex; align-items:center; gap:9px; margin-bottom:10px;
+  }
+  .stack-label .key{color:var(--cyan-dim); font-size:11px;}
+  .stack-chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .stack-chips span{
+    font-family:var(--mono); font-size:12px; color:var(--cyan);
+    background:rgba(79,216,232,0.08); border:1px solid rgba(79,216,232,0.2);
+    padding:5px 11px; border-radius:5px;
+    transition:background .15s, border-color .15s, color .15s;
+  }
+  .stack-chips span:hover{background:rgba(79,216,232,0.14); border-color:var(--cyan); color:var(--text-hi);}
+
   /* ===== CONTACT ===== */
   .contact-panel{
     background:var(--bg-panel); border:1px solid var(--border-hi); border-radius:10px;
@@ -232,7 +250,7 @@
 </head>
 <body>
 
-<div class="grid-overlay"></div>
+<canvas class="dot-field" id="dotField" aria-hidden="true"></canvas>
 
 <header>
   <nav>
@@ -292,7 +310,7 @@
         <div class="ph"><span>system_profile.json</span><span>v1.0</span></div>
         <div class="stat-row"><span class="label">role</span><span class="val">Web Dev / IT Officer</span></div>
         <div class="stat-row"><span class="label">focus</span><span class="val">Full-stack + Infra</span></div>
-        <div class="stat-row"><span class="label">projects_shipped</span><span class="val">3</span></div>
+        <div class="stat-row"><span class="label">projects_shipped</span><span class="val">7</span></div>
         <div class="stat-row"><span class="label">status</span><span class="status-ok">available</span></div>
       </div>
     </div>
@@ -352,6 +370,66 @@
         </div>
       </div>
 
+      <!-- Twist Puree -->
+      <div class="proj-card">
+        <div class="proj-bar">
+          <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+          twistpuree.com
+        </div>
+        <div class="proj-body">
+          <div class="proj-status live">live</div>
+          <div class="proj-title">Twist Puree</div>
+          <div class="proj-desc">Business website built and deployed for a food brand — presenting products and the brand online.</div>
+          <div class="proj-tags"><span>Business Site</span><span>Client Work</span><span>Deployed</span></div>
+          <a class="proj-link" href="https://www.twistpuree.com/" target="_blank" rel="noopener">visit_site <span class="arrow">→</span></a>
+        </div>
+      </div>
+
+      <!-- Academia Edu -->
+      <div class="proj-card">
+        <div class="proj-bar">
+          <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+          academiaedu.org
+        </div>
+        <div class="proj-body">
+          <div class="proj-status live">live</div>
+          <div class="proj-title">Academia Edu</div>
+          <div class="proj-desc">Website developed for an education platform, covering program information and an online presence for learners.</div>
+          <div class="proj-tags"><span>Education</span><span>Client Work</span><span>Deployed</span></div>
+          <a class="proj-link" href="https://academiaedu.org/" target="_blank" rel="noopener">visit_site <span class="arrow">→</span></a>
+        </div>
+      </div>
+
+      <!-- Alnoor Academia -->
+      <div class="proj-card">
+        <div class="proj-bar">
+          <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+          alnoor-academia.org
+        </div>
+        <div class="proj-body">
+          <div class="proj-status live">live</div>
+          <div class="proj-title">Alnoor Academia</div>
+          <div class="proj-desc">Website built for an academic institution — a clear, professional public front for the school and its programs.</div>
+          <div class="proj-tags"><span>Education</span><span>Client Work</span><span>Deployed</span></div>
+          <a class="proj-link" href="https://www.alnoor-academia.org/" target="_blank" rel="noopener">visit_site <span class="arrow">→</span></a>
+        </div>
+      </div>
+
+      <!-- Annaliza Diet -->
+      <div class="proj-card">
+        <div class="proj-bar">
+          <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+          annalizadiet.com
+        </div>
+        <div class="proj-body">
+          <div class="proj-status live">live</div>
+          <div class="proj-title">Annaliza Diet</div>
+          <div class="proj-desc">Website developed for a diet and nutrition service — presenting services and letting clients get in touch.</div>
+          <div class="proj-tags"><span>Business Site</span><span>Client Work</span><span>Deployed</span></div>
+          <a class="proj-link" href="https://www.annalizadiet.com/" target="_blank" rel="noopener">visit_site <span class="arrow">→</span></a>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -363,6 +441,44 @@
       <div class="sec-rule"></div>
     </div>
     <div class="dash">
+      <div class="dash-sub">tech stack</div>
+
+      <div class="stack-group">
+        <div class="stack-label"><span class="key">01</span>Programming Languages</div>
+        <div class="stack-chips">
+          <span>JavaScript</span><span>TypeScript</span><span>PHP</span><span>Java</span><span>C++</span><span>C</span>
+        </div>
+      </div>
+
+      <div class="stack-group">
+        <div class="stack-label"><span class="key">02</span>Frontend</div>
+        <div class="stack-chips">
+          <span>HTML5</span><span>CSS3</span><span>Tailwind CSS</span>
+        </div>
+      </div>
+
+      <div class="stack-group">
+        <div class="stack-label"><span class="key">03</span>Backend</div>
+        <div class="stack-chips">
+          <span>Node.js</span><span>PHP</span>
+        </div>
+      </div>
+
+      <div class="stack-group">
+        <div class="stack-label"><span class="key">04</span>Database</div>
+        <div class="stack-chips">
+          <span>MySQL</span><span>SQL</span>
+        </div>
+      </div>
+
+      <div class="stack-group">
+        <div class="stack-label"><span class="key">05</span>Design</div>
+        <div class="stack-chips">
+          <span>Figma</span><span>Canva</span><span>Adobe Photoshop</span>
+        </div>
+      </div>
+
+      <div class="dash-sub">proficiency</div>
       <div class="dash-grid">
         <div class="skill-block">
           <div class="skill-top"><span class="name">HTML / CSS</span><span class="pct">95%</span></div>
@@ -420,6 +536,172 @@
     <span class="status-ok">system online — built with HTML / CSS / JS</span>
   </div>
 </footer>
+
+<script>
+(function(){
+  var canvas = document.getElementById('dotField');
+  if(!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+
+  /* tunable */
+  var GAP = 26;         /* dot spacing (px) */
+  var BASE_R = 1.05;    /* resting dot radius */
+  var BASE_A = 0.22;    /* resting dot alpha */
+  var FADE_MIN = 0.30;  /* dot alpha multiplier at the bottom of the viewport */
+  var LENS = 150;       /* glass radius around the cursor */
+  var MAX_SCALE = 3.4;  /* how much dots grow under the cursor */
+  var TAU = Math.PI * 2;
+
+  var base = document.createElement('canvas');
+  var bctx = base.getContext('2d');
+  var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  /* read the palette off :root so the field always matches the theme */
+  var root = getComputedStyle(document.documentElement);
+  function hex(v, fallback){
+    v = (v || fallback).trim().replace('#','');
+    if(v.length === 3) v = v[0]+v[0]+v[1]+v[1]+v[2]+v[2];
+    var n = parseInt(v, 16);
+    return isNaN(n) ? [79,216,232] : [(n>>16)&255, (n>>8)&255, n&255];
+  }
+  var CYAN = hex(root.getPropertyValue('--cyan'));
+  var HOT  = hex(root.getPropertyValue('--text-hi'));
+
+  function tint(k, a){
+    return 'rgba(' + Math.round(CYAN[0] + (HOT[0]-CYAN[0])*k) + ',' +
+                    Math.round(CYAN[1] + (HOT[1]-CYAN[1])*k) + ',' +
+                    Math.round(CYAN[2] + (HOT[2]-CYAN[2])*k) + ',' + a.toFixed(3) + ')';
+  }
+
+  var w = 0, h = 0, dpr = 1;
+  var mx = 0, my = 0, lx = 0, ly = 0;
+  var inten = 0, target = 0, running = false;
+
+  function fadeFor(y){ return 1 - (1 - FADE_MIN) * (y / (h || 1)); }
+  function snap(v){ return Math.ceil((v - GAP*0.5) / GAP) * GAP + GAP*0.5; }
+
+  /* base layer is static, so it is rendered once and blitted each frame */
+  function buildBase(){
+    bctx.clearRect(0, 0, w, h);
+    for(var y = GAP*0.5; y < h; y += GAP){
+      bctx.fillStyle = tint(0, BASE_A * fadeFor(y));
+      for(var x = GAP*0.5; x < w; x += GAP){
+        bctx.beginPath();
+        bctx.arc(x, y, BASE_R, 0, TAU);
+        bctx.fill();
+      }
+    }
+  }
+
+  function resize(){
+    var cw = canvas.clientWidth  || window.innerWidth;
+    var ch = canvas.clientHeight || window.innerHeight;
+    var nd = Math.min(window.devicePixelRatio || 1, 2);
+    if(cw === w && ch === h && nd === dpr) return;
+    if(!cw || !ch) return;
+
+    w = cw; h = ch; dpr = nd;
+    canvas.width = base.width  = Math.round(w * dpr);
+    canvas.height = base.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    buildBase();
+    draw();
+  }
+
+  function draw(){
+    if(!w || !h) return;
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(base, 0, 0, w, h);
+    if(reduce || inten < 0.003) return;
+
+    /* soft glassy sheen under the lens */
+    var glow = ctx.createRadialGradient(lx, ly, 0, lx, ly, LENS);
+    glow.addColorStop(0, tint(0.25, 0.10 * inten));
+    glow.addColorStop(1, tint(0, 0));
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(lx, ly, LENS, 0, TAU);
+    ctx.fill();
+
+    /* redraw only the grid-aligned dots the lens covers, scaled up */
+    var gx0 = Math.max(GAP*0.5, snap(lx - LENS));
+    var gy0 = Math.max(GAP*0.5, snap(ly - LENS));
+    var gx1 = Math.min(w, lx + LENS);
+    var gy1 = Math.min(h, ly + LENS);
+
+    for(var y = gy0; y <= gy1; y += GAP){
+      var dy = y - ly, rowA = fadeFor(y);
+      for(var x = gx0; x <= gx1; x += GAP){
+        var dx = x - lx;
+        var d = Math.sqrt(dx*dx + dy*dy);
+        if(d >= LENS) continue;
+        var f = 1 - d / LENS;
+        f = f * f * (3 - 2 * f) * inten;            /* smoothstep falloff */
+        ctx.fillStyle = tint(f, (BASE_A + 0.62 * f) * rowA);
+        ctx.beginPath();
+        ctx.arc(x, y, BASE_R * (1 + MAX_SCALE * f), 0, TAU);
+        ctx.fill();
+      }
+    }
+
+    /* lens rim */
+    ctx.strokeStyle = tint(0.1, 0.20 * inten);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(lx, ly, LENS, 0, TAU);
+    ctx.stroke();
+  }
+
+  function frame(){
+    running = false;
+
+    var dx = mx - lx, dy = my - ly;
+    if(Math.abs(dx) > 0.2 || Math.abs(dy) > 0.2){ lx += dx * 0.18; ly += dy * 0.18; }
+    else { lx = mx; ly = my; }
+
+    var di = target - inten;
+    if(Math.abs(di) > 0.004) inten += di * 0.16;
+    else inten = target;
+
+    draw();
+
+    if(Math.abs(mx - lx) > 0.2 || Math.abs(my - ly) > 0.2 || inten !== target){
+      running = true;
+      requestAnimationFrame(frame);
+    }
+  }
+
+  function kick(){ if(!running){ running = true; requestAnimationFrame(frame); } }
+  function fine(e){ return e.pointerType === 'mouse' || e.pointerType === 'pen'; }
+
+  window.addEventListener('pointermove', function(e){
+    if(!fine(e)) return;
+    mx = e.clientX; my = e.clientY;
+    if(target === 0){ lx = mx; ly = my; }   /* re-entry: no fly-in */
+    target = 1;
+    kick();
+  }, {passive:true});
+
+  window.addEventListener('pointerdown', function(e){
+    if(!fine(e)) return;
+    mx = e.clientX; my = e.clientY; target = 1; kick();
+  }, {passive:true});
+
+  function off(){ if(target === 1){ target = 0; kick(); } }
+  window.addEventListener('blur', off);
+  window.addEventListener('pointerout', function(e){ if(!e.relatedTarget) off(); }, {passive:true});
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) off(); });
+
+  var rt = 0;
+  window.addEventListener('resize', function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){ dpr = 0; resize(); }, 120);
+  });
+
+  resize();
+})();
+</script>
 
 </body>
 </html>
